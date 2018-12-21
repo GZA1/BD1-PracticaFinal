@@ -1,7 +1,7 @@
 Propietarios(calle, numero, nombre, apellidos, dni 
-Viviendas(calle, número, piso, tipo vivienda, precio de tasacion, nº catastro, m^2, )
-Ocupantes(nombre,  apellidos, edad/fecha nac, )
-Impuestos(fecha de vencimiento, importe , fecha inicio, nombre, fecha actual de pago) 
-Provincia(Nombre, código de provincia-PK)
-ZonasUrbanas(AvgPrecioM2, nombre, área, coordenadas geográficas, codigo postal )
-Municipios(Nombre, área, CODIGO UNICO-PK )
+Viviendas(calle, nÃºmero, piso, precio de tasacion, nÂº catastro-PK, m^2
+Ocupantes(dni-PK, nombre,  apellidos, edad/fecha nac
+Impuestos(fecha de vencimiento, importe , fecha inicio, nombre, fecha actual de pago
+Provincia(Nombre, cÃ³digo de provincia-PK
+Barrios(idBarrio-PK, AvgPrecioM2, nombre, Ã¡rea, coordenadas geogrÃ¡ficas, codigo postal
+Municipios(Nombre, Ã¡rea, CODIGO UNICO-PK
