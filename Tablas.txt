@@ -1,0 +1,8 @@
+Propietarios(calle, numero, nombre, apellidos, dni 
+Viviendas(calle, número, piso, tipo vivienda, precio de tasacion, nº catastro, m^2, 
+Ocupantes(nombre,  apellidos, edad/fecha nac, 
+Impuestos(fecha de vencimiento, importe , fecha inicio 
+Ayuntamientos(idAyto-PK,  
+Provincia(Nombre, 
+ZonasUrbanas(AvgPrecioM2, nombre, área, coordenadas geográficas, codigo postal 
+Municipios(Nombre, área, CODIGO UNICO-PK 
