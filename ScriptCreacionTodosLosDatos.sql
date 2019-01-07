@@ -294,15 +294,15 @@ COMMIT;
 START TRANSACTION;
 USE `AdminViviendas`;
 INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('74564234Q', 'Pedro', 'Alvarez Callado', '1982-12-17', '9872023 VH5797S 0001 WX');
-INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('16512788T', 'Juan', 'Perez Adrados', '1980-03-11', '9666525 RR5168T 8541 GG');
+INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('16512788T', 'Juan', 'Perez Adrados', '1949-01-05', '9666525 RR5168T 8541 GG');
 INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('90095607S', 'Alvaro', 'Pascual Ramirez', '1975-07-15', '9112515 SC5184F 9952 FR');
 INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('20911089H', 'Carmen', 'Ruiz De la fuente', '1989-11-02', '9001259 ZE7812S 2288 YY');
-INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('04915024Q', 'Raquel', 'Alberas Aizaga', '1973-12-01', '9110254 WS448O 3354 QW');
+INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('04915024Q', 'Raquel', 'Alberas Aizaga', '1949-05-01', '9110254 WS448O 3354 QW');
 INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('72692306R', 'Miguel', 'Encinas Escalante', '1976-02-22', '9110254 WS448O 3354 QW');
 INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('69790544B', 'Irene', 'Martinez Contreras', '1989-06-27', '7445852 HG2591T 0202 VN');
 INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('71860541P', 'Imma', 'Baptista Escalero', '1992-12-30', '1888254 CF4511R 9955 NB');
 INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('64105041Q', 'Carmen', 'Menosa Escudero', '1974-11-21', '2255255 CC8858Y 0110 SA');
-INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('25613098E', 'Lauren', 'Green Jones', '1970-09-12', '2255877 ZZ9523J 7751 MN');
+INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('25613098E', 'Lauren', 'Green Jones', '1930-09-12', '2255877 ZZ9523J 7751 MN');
 INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('68496613Z', 'Rafael', 'Gustavson Drarksen', '1968-03-09', '9522624 YP4525P 0005 KK');
 
 COMMIT;
