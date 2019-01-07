@@ -264,6 +264,7 @@ INSERT INTO `AdminViviendas`.`Viviendas` (`nºCatastro`, `calle`, `num`, `piso`,
 INSERT INTO `AdminViviendas`.`Viviendas` (`nºCatastro`, `calle`, `num`, `piso`, `m2`, `precioTasacion`, `idBarrios`, `dni`) VALUES ('2255255 CC8858Y 0110 SA', 'Avda. Zapataria ', 11, 3, 162, 126850, '7509', '73793158G');
 INSERT INTO `AdminViviendas`.`Viviendas` (`nºCatastro`, `calle`, `num`, `piso`, `m2`, `precioTasacion`, `idBarrios`, `dni`) VALUES ('2255877 ZZ9523J 7751 MN', 'Avda. Punta Cuntera', 5, 5, 63, 115300, '7505', '44892211Y');
 INSERT INTO `AdminViviendas`.`Viviendas` (`nºCatastro`, `calle`, `num`, `piso`, `m2`, `precioTasacion`, `idBarrios`, `dni`) VALUES ('9522624 YP4525P 0005 KK', 'Avda. La Sevillana Marena', 2, 1, 80, 175300, '7506', '94328497T');
+INSERT INTO `AdminViviendas`.`Viviendas` (`nºCatastro`, `calle`, `num`, `piso`, `m2`, `precioTasacion`, `idBarrios`, `dni`) VALUES ('1388754 CX8466H 0666 PO', 'Avda. Palencia', 1, 1, 107, 107640, '7510', '64105041Q');
 
 COMMIT;
 
@@ -304,6 +305,7 @@ INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, 
 INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('64105041Q', 'Carmen', 'Menosa Escudero', '1974-11-21', '2255255 CC8858Y 0110 SA');
 INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('25613098E', 'Lauren', 'Green Jones', '1970-09-12', '2255877 ZZ9523J 7751 MN');
 INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('68496613Z', 'Rafael', 'Gustavson Drarksen', '1968-03-09', '9522624 YP4525P 0005 KK');
+INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `nºCatastro`) VALUES ('47543333U', 'Javier', 'Gutiérrez Del Río', '1938-11-15', '9112515 SC5184F 9952 FR');
 
 COMMIT;
 
