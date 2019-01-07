@@ -25,13 +25,15 @@ The LEFT JOIN keyword returns all records from the left table (table1), and the 
 The result is NULL from the right side, if there is no match.
 */
 
-SELECT DISTINCT v.nºCatastro, v.calle, v.num, v.piso, v.m2, v.precioTasacion
-FROM Viviendas v
-LEFT JOIN Ocupantes o ON v.nºCatastro = o.nºCatastro
-WHERE o.nombre IS NULL
-ORDER BY v.precioTasacion;
-
-
+SELECT v.nºCatastro, calle, num, piso, b.nombre as nombreBarrio, m.nombre as nombreMunicipio
+	FROM viviendas v, barrios b, municipios m
+    WHERE v.idBarrios = b.idBarrios and b.idMunicipio = m.idMunicipio and v.nºCatastro in(
+		SELECT viviendas.nºCatastro
+			FROM viviendas
+			LEFT JOIN ocupantes ON(viviendas.nºCatastro=ocupantes.nºCatastro)
+			WHERE ocupantes.nºCatastro IS NULL
+		)
+    ORDER BY m.nombre, b.nombre, v.calle;
 
 
 /*LISTADOS PARA LA CONSEJERÍA DE BIENESTAR SOCIAL
