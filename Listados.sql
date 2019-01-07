@@ -43,23 +43,16 @@ FROM Viviendas v, Ocupantes o, Barrios b
 WHERE v.nºCatastro = o.nºCatastro AND v.idBarrios = b.idBarrios AND ((YEAR(CURRENT_TIME()) - YEAR(o.fNac)) - (DATE_FORMAT(CURRENT_TIME(), '00-%m-%d') < DATE_FORMAT(o.fNac, '00-%m-%d'))) >= 70
 ORDER BY v.precioTasacion;
 
--- -------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-SELECT * FROM Ocupantes
-WHERE ((YEAR(CURRENT_TIME()) - YEAR(fNac)) - (DATE_FORMAT(CURRENT_TIME(), '00-%m-%d') < DATE_FORMAT(fNac, '00-%m-%d'))) >= 70;
-
-SELECT * FROM Ocupantes
-WHERE ((YEAR(CURRENT_TIME()) - YEAR(fNac)) - (DATE_FORMAT(CURRENT_TIME(), '00-%m-%d') < DATE_FORMAT(fNac, '00-%m-%d'))) > 70;
-
-((YEAR(current_time) - YEAR(date_of_birth)) - (DATE_FORMAT(current_time, '00-%m-%d') < DATE_FORMAT(date_of_birth, '00-%m-%d'))) > 70;
-
-SELECT * FROM Viviendas v
-WHERE o.nºCatastro = null;
-
-SELECT * FROM Barrios;
 
 
 /*LISTADOS PARA LA CONSEJERÍA DE ECONOMÍA Y HACIENDA
 Quinto listado, propietarios que no estan al corriente de pagos*/
 
+
+
+SELECT p.dni, p.nombre, p.apellidos, p.calle, p.num, p.piso, b.nombre, m.nombre
+FROM Impuestos i, Propietarios p, Viviendas v, Municipios m, Barrios b
+WHERE p.dni = i.dni AND i.nºCatastro = v.nºCatastro AND v.idBarrios = b.idBarrios AND b.idMunicipio = m.idMunicipio
+	AND CURRENT_TIME() > fechaVencimiento AND fechaActualPago IS NULL
+ORDER BY m.nombre, b.nombre;
 

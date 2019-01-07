@@ -116,12 +116,12 @@ CREATE TABLE IF NOT EXISTS `AdminViviendas`.`Impuestos` (
   `fechaVencimiento` DATE NOT NULL,
   `importe` DECIMAL(10,3) NOT NULL,
   `fechaActualPago` DATE NULL,
-  `Viviendas_nºCatastro` VARCHAR(28) NOT NULL,
+  `nºCatastro` VARCHAR(28) NOT NULL,
   `dni` CHAR(9) NOT NULL,
-  PRIMARY KEY (`idImpuesto`, `Viviendas_nºCatastro`),
+  PRIMARY KEY (`idImpuesto`, `nºCatastro`),
   INDEX `fk_Impuestos_Propietarios1_idx` (`dni` ASC) VISIBLE,
   CONSTRAINT `fk_Impuestos_Viviendas1`
-    FOREIGN KEY (`Viviendas_nºCatastro`)
+    FOREIGN KEY (`nºCatastro`)
     REFERENCES `AdminViviendas`.`Viviendas` (`nºCatastro`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -273,17 +273,17 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `AdminViviendas`;
-INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `Viviendas_nºCatastro`, `dni`) VALUES ('YYYY84512', '2018-10-17', '2018-12-26', 300, '2018-11-02', '9872023 VH5797S 0001 WX', '73793158G');
-INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `Viviendas_nºCatastro`, `dni`) VALUES ('TYFF47855', '2018-08-11', '2018-11-22', 562.25, '2018-10-15', '9666525 RR5168T 8541 GG', '73793158G');
-INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `Viviendas_nºCatastro`, `dni`) VALUES ('YYGR95631', '2018-09-19', '2018-12-25', 956.32, '2018-11-12', '9112515 SC5184F 9952 FR', '73793158G');
-INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `Viviendas_nºCatastro`, `dni`) VALUES ('VFRY45223', '2018-08-25', '2018-10-21', 200.65, '2018-09-05', '9001259 ZE7812S 2288 YY', '20039032Y');
-INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `Viviendas_nºCatastro`, `dni`) VALUES ('XRGZ45123', '2018-11-29', '2019-01-17', 201.90, '2018-12-26', '9110254 WS448O 3354 QW', '41679701K');
-INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `Viviendas_nºCatastro`, `dni`) VALUES ('XTTR12558', '2018-07-02', '2018-09-12', 362.15, '2018-08-29', '7445852 LP8524O 1119 ZX', '71297004V');
-INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `Viviendas_nºCatastro`, `dni`) VALUES ('XGRG74584', '2018-02-15', '2018-05-13', 253.02, '2018-02-28', '7445852 HG2591T 0202 VN', '59804933B');
-INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `Viviendas_nºCatastro`, `dni`) VALUES ('XXWR41054', '2018-04-18', '2018-06-26', 426.332, '2018-05-08', '8956211 VB6518F 0025 VV', '20039032Y');
-INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `Viviendas_nºCatastro`, `dni`) VALUES ('HBBE99633', '2018-01-30', '2018-03-11', 481.30, NULL, '1888254 CF4511R 9955 NB', '23310054Z');
-INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `Viviendas_nºCatastro`, `dni`) VALUES ('NJMJ51225', '2018-10-22', '2019-02-02', 305.9, '2018-02-01', '2255255 CC8858Y 0110 SA', '73793158G');
-INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `Viviendas_nºCatastro`, `dni`) VALUES ('KKL575456', '2018-12-15', '2019-03-29', 557.5, NULL, '9522624 YP4525P 0005 KK', '94328497T');
+INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `nºCatastro`, `dni`) VALUES ('YYYY84512', '2018-10-17', '2018-12-26', 300, '2018-11-02', '9872023 VH5797S 0001 WX', '73793158G');
+INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `nºCatastro`, `dni`) VALUES ('TYFF47855', '2018-08-11', '2018-11-22', 562.25, NULL, '9666525 RR5168T 8541 GG', '73793158G');
+INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `nºCatastro`, `dni`) VALUES ('YYGR95631', '2018-09-19', '2018-12-25', 956.32, '2018-11-12', '9112515 SC5184F 9952 FR', '73793158G');
+INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `nºCatastro`, `dni`) VALUES ('VFRY45223', '2018-08-25', '2018-10-21', 200.65, NULL, '9001259 ZE7812S 2288 YY', '20039032Y');
+INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `nºCatastro`, `dni`) VALUES ('XRGZ45123', '2018-11-29', '2019-01-17', 201.90, '2018-12-26', '9110254 WS448O 3354 QW', '41679701K');
+INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `nºCatastro`, `dni`) VALUES ('XTTR12558', '2018-07-02', '2018-09-12', 362.15, '2018-08-29', '7445852 LP8524O 1119 ZX', '71297004V');
+INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `nºCatastro`, `dni`) VALUES ('XGRG74584', '2018-02-15', '2018-05-13', 253.02, '2018-02-28', '7445852 HG2591T 0202 VN', '59804933B');
+INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `nºCatastro`, `dni`) VALUES ('XXWR41054', '2018-04-18', '2018-06-26', 426.332, '2018-05-08', '8956211 VB6518F 0025 VV', '20039032Y');
+INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `nºCatastro`, `dni`) VALUES ('HBBE99633', '2018-01-30', '2018-03-11', 481.30, NULL, '1888254 CF4511R 9955 NB', '23310054Z');
+INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `nºCatastro`, `dni`) VALUES ('NJMJ51225', '2018-10-22', '2019-02-02', 305.9, '2018-02-01', '2255255 CC8858Y 0110 SA', '73793158G');
+INSERT INTO `AdminViviendas`.`Impuestos` (`idImpuesto`, `fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `nºCatastro`, `dni`) VALUES ('KKL575456', '2018-12-15', '2019-03-29', 557.5, NULL, '9522624 YP4525P 0005 KK', '94328497T');
 
 COMMIT;
 
