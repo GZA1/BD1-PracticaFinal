@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS `AdminViviendas`.`Municipios` (
   CONSTRAINT `fk_Municipios_Provincias1`
     FOREIGN KEY (`codigoProvincia`)
     REFERENCES `AdminViviendas`.`Provincias` (`codigoProvincia`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -59,8 +59,8 @@ CREATE TABLE IF NOT EXISTS `AdminViviendas`.`Barrios` (
   CONSTRAINT `fk_Barrios_Municipios1`
     FOREIGN KEY (`idMunicipio`)
     REFERENCES `AdminViviendas`.`Municipios` (`idMunicipio`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -96,13 +96,13 @@ CREATE TABLE IF NOT EXISTS `AdminViviendas`.`Viviendas` (
   CONSTRAINT `fk_Viviendas_Barrios1`
     FOREIGN KEY (`idBarrios`)
     REFERENCES `AdminViviendas`.`Barrios` (`idBarrios`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Viviendas_Propietarios1`
     FOREIGN KEY (`dni`)
     REFERENCES `AdminViviendas`.`Propietarios` (`dni`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB
 COMMENT = '	';
 
@@ -124,12 +124,12 @@ CREATE TABLE IF NOT EXISTS `AdminViviendas`.`Impuestos` (
     FOREIGN KEY (`nºCatastro`)
     REFERENCES `AdminViviendas`.`Viviendas` (`nºCatastro`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_Impuestos_Propietarios1`
     FOREIGN KEY (`dni`)
     REFERENCES `AdminViviendas`.`Propietarios` (`dni`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -147,8 +147,8 @@ CREATE TABLE IF NOT EXISTS `AdminViviendas`.`Ocupantes` (
   CONSTRAINT `fk_Ocupantes_Viviendas1`
     FOREIGN KEY (`nºCatastro`)
     REFERENCES `AdminViviendas`.`Viviendas` (`nºCatastro`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 

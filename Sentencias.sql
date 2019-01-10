@@ -105,60 +105,88 @@ INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, 
 
 
 
+/*Desactivar safe_update*/
+SET SQL_SAFE_UPDATES = 0;
 /*SENTENCIAS DE MODIFICACIÓN O ACTUALIZACIÓN DE TUPLAS
-12-Actualizar el nombre de la provincia Palencia a Salamanca*/
+12-Actualizar el nombre de la provincia Palencia a Salamanca y su código a 475611SAL*/
 
-UPDATE Provincias
-	SET nombre='Salamanca'
-    WHERE codigoProvincia='843319PAL';
-
-
-
-/*SENTENCIAS DE MODIFICACIÓN O ACTUALIZACIÓN DE TUPLAS
-13-Actualizar el nombre del municipio de Astudillo a Béjar y del barrio de palacios del Alcor a Fuentebuena*/
-
-UPDATE Municipios m, Barrios b 
-	SET m.nombre='Béjar' AND b.nombre='Fuentebuena'
-    WHERE idMunicipio='47186' AND idBarrio='7511';
+UPDATE Provincias p
+	SET p.nombre='Salamanca', p.codigoProvincia='475611SAL'
+    WHERE p.nombre='Palencia';
 
 
 
 /*SENTENCIAS DE MODIFICACIÓN O ACTUALIZACIÓN DE TUPLAS
-14-*/
+13-Actualizar el nombre del municipio de Astudillo a Béjar, municipio de Salamanca, y del barrio de Palacios del Alcor a Fuentebuena,
+ barrio de Béjar con código 7520*/
+
+UPDATE Provincias p, Municipios m, Barrios b 
+	SET m.nombre='Béjar', m.codigoProvincia=p.codigoProvincia, b.nombre='Fuentebuena', b.idMunicipio=m.idMunicipio, b.idBarrios='7520'
+    WHERE p.nombre='Salamanca' AND m.nombre='Astudillo' AND b.nombre='Palacios del Alcor';
 
 
 
+/*SENTENCIAS DE MODIFICACIÓN O ACTUALIZACIÓN DE TUPLAS
+14-Hubo un error en la estimación del área de los barrios de la provincia de Segovia, se estimó un 10% de más; se debe actualizar este valor
+reduciéndolo en un 10% para todos ellos*/
+
+UPDATE Provincias p, Municipios m, Barrios b
+	SET b.area=b.area-b.area*0.1
+    WHERE p.nombre='Segovia' AND p.codigoProvincia=m.codigoProvincia AND m.idMunicipio=b.idMunicipio;
 
 
 
-/*SENTENCIAS DE MODIFICACIÓN DE COLUMNAS
-16-Actualizar el nombre de la columna zipCode de la tabla Barrios a codigoPostal*/
+/*SENTENCIAS DE MODIFICACIÓN O ACTUALIZACIÓN DE TUPLAS
+15-El ocupantes con dni='68496613Z' se muda de su vivienda a otra con nºcatastral='1888254 CF4511R 9955 NB'*/
 
-ALTER TABLE Barrios
-	ALTER COLUMN zipCode codigoPostal;
-
-
-
+UPDATE Ocupantes
+	SET nºCatastro='1888254 CF4511R 9955 NB'
+    WHERE dni='68496613Z';
 
 
 
+/*SENTENCIAS DE MODIFICACIÓN O ACTUALIZACIÓN DE TUPLAS
+16-Raúl Migua Otero ha adquirido una vivienda del barrio de Caballeros, del municipio de Cuéllar en Segovia.
+La vivienda está en la calle Calle Lorenzo Gonzalez número 2, piso 2 A y al adquirirla su precio de tasación ha
+aumentado un 8%*/
 
+UPDATE Provincias p, Municipios m, Barrios b, Viviendas v, Propietarios prop
+	SET v.dni=prop.dni, v.precioTasacion=v.precioTasacion+0.08*v.precioTasacion
+    WHERE p.nombre='Segovia' AND m.nombre='Cuéllar' AND b.nombre='Caballeros' AND v.calle='Calle Lorenzo Gonzalez'
+		AND v.num='2' AND v.piso='2 A' AND prop.nombre='Raúl' AND prop.apellidos='Migua Otero';
 
 
 
 /*SENTENCIAS DE BORRADO DE TUPLAS
-18-Borrar la provincia con codigoProvincia=843319PAL*/
+17-Borrar la provincia con codigoProvincia=475611SAL*/
 
 DELETE FROM Provincias
-	WHERE codigoProvincia='843319PAL';
-    
+	WHERE codigoProvincia='475611SAL';
+
+
+
+/*SENTENCIAS DE BORRADO DE TUPLAS
+18-Borrar a los ocupantes nacidos antes de 1980*/
+
+DELETE FROM Ocupantes
+	WHERE year(Ocupantes.fNac)<1980;
+ 
+
+
+/*SENTENCIAS DE BORRADO DE TUPLAS
+19-Borrar los impuestos relacionados a propietarios con dnis que contengan dos ceros juntos*/
+
+DELETE FROM Impuestos
+	WHERE dni LIKE '%00%';
+ 
     
 
 
 
 /*Consultar cada tabla*/
 SELECT * FROM Provincias;
-SELECT * FROM Municipios;
+SELECT * FROM Municipios
+	ORDER BY nombre;
 SELECT * FROM Barrios;
 SELECT * FROM Propietarios;
 SELECT * FROM Viviendas;
