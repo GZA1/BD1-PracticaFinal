@@ -63,7 +63,6 @@ ORDER BY m.nombre, b.nombre;
 
 
 
-
 /*SENTENCIAS DE INSERCIÓN DE TUPLAS
 6-Inserción de una nueva provincia: Palencia*/
 
@@ -170,12 +169,15 @@ WHERE
         AND prop.nombre = 'Raúl'
         AND prop.apellidos = 'Migua Otero';
 
+
+
 /*SENTENCIAS DE MODIFICACION DE TUPLAS O ACTUALIZACIÓN DE TUPLAS
 17- Si el propietario ha excedido la fecha de vencimiento del impuesto se le aplica un 25% sobre el importe total.*/    
 
 UPDATE Impuestos i
 SET i.importe = i.importe * 1.25
 WHERE CURRENT_TIME() > i.fechaVencimiento AND i.fechaActualPago IS NULL;
+
 
 
 /*SENTENCIAS DE BORRADO DE TUPLAS
@@ -204,19 +206,26 @@ DELETE FROM Impuestos
 21- Los ocupantes con dni 69790544B y 90095607S fallecieron*/
 
 DELETE FROM Ocupantes
-	WHERE dni = '69790544B' AND dni = '90095607S';
+	WHERE dni = '69790544B' OR dni = '90095607S';
+    
+    
     
 /*SENTENCIAS DE BORRADO DE TUPLAS
-22- Para aligerar la carga de la base de datos, se borrarán los impuestos cuya fecha de vencimiento sea anterior al año 2002*/
+22- Para aligerar la carga de la base de datos, se borrarán los impuestos cuya fecha de vencimiento sea anterior a comienzo de año y ya
+se haya pagado el importe del impuesto*/
 
 DELETE FROM Impuestos
-	WHERE fechaVencimiento < '2002/01/01';
+	WHERE fechaVencimiento < '2019/01/01' AND fechaActualPago IS NOT NULL;
+
+
 
 /*SENTENCIAS ALTER TABLE 
-23- Cambiar el nombre de columna zipCoded por codigoPostal*/
+23- Cambiar el nombre de la columna zipCode de la tabla Barrios por codigoPostal, también un entero*/
 
-ALTER TABLE Viviendas
+ALTER TABLE Barrios
 CHANGE zipCode codigoPostal int;
+
+
 
 /*Consultar cada tabla*/
 SELECT * FROM Provincias;
