@@ -135,7 +135,7 @@ UPDATE Municipios m, Barrios b
 16-Actualizar el nombre de la columna zipCode de la tabla Barrios a codigoPostal*/
 
 ALTER TABLE Barrios
-	ALTER COLUMN zipCode codigoPostal;
+	CHANGE zipCode codigoPostal int;
 
 
 
