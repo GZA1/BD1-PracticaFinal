@@ -212,6 +212,11 @@ DELETE FROM Ocupantes
 DELETE FROM Impuestos
 	WHERE fechaVencimiento < '2002/01/01';
 
+/*SENTENCIAS ALTER TABLE 
+23- Cambiar el nombre de columna zipCoded por codigoPostal*/
+
+ALTER TABLE Viviendas
+CHANGE zipCode codigoPostal int;
 
 /*Consultar cada tabla*/
 SELECT * FROM Provincias;
