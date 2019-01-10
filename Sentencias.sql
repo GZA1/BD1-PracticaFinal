@@ -200,7 +200,17 @@ DELETE FROM Ocupantes
 DELETE FROM Impuestos
 	WHERE dni LIKE '%00%';
  
+/*SENTENCIAS DE BORRADO DE TUPLAS
+21- Los ocupantes con dni 69790544B y 90095607S fallecieron*/
 
+DELETE FROM Ocupantes
+	WHERE dni = '69790544B' AND dni = '90095607S';
+    
+/*SENTENCIAS DE BORRADO DE TUPLAS
+22- Para aligerar la carga de la base de datos, se borrarán los impuestos cuya fecha de vencimiento sea anterior al año 2002*/
+
+DELETE FROM Impuestos
+	WHERE fechaVencimiento < '2002/01/01';
 
 
 /*Consultar cada tabla*/
