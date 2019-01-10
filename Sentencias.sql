@@ -114,6 +114,32 @@ UPDATE Provincias
 
 
 
+/*SENTENCIAS DE MODIFICACIÓN O ACTUALIZACIÓN DE TUPLAS
+13-Actualizar el nombre del municipio de Astudillo a Béjar y del barrio de palacios del Alcor a Fuentebuena*/
+
+UPDATE Municipios m, Barrios b 
+	SET m.nombre='Béjar' AND b.nombre='Fuentebuena'
+    WHERE idMunicipio='47186' AND idBarrio='7511';
+
+
+
+/*SENTENCIAS DE MODIFICACIÓN O ACTUALIZACIÓN DE TUPLAS
+14-*/
+
+
+
+
+
+
+/*SENTENCIAS DE MODIFICACIÓN DE COLUMNAS
+16-Actualizar el nombre de la columna zipCode de la tabla Barrios a codigoPostal*/
+
+ALTER TABLE Barrios
+	ALTER COLUMN zipCode codigoPostal;
+
+
+
+
 
 
 
