@@ -3,6 +3,7 @@ use adminviviendas;
 
 
 /*LISTADOS PARA LA CONSEJERÍA DE VIVIENDA Y URBANISMO
+
 Primera consulta, listado de zonas urbanas con precio medio del m2, nombre, área coord. geográficas
 municipio y provincia. Ordenado por provincia y municipio*/
 
@@ -52,13 +53,14 @@ ORDER BY v.precioTasacion;
 
 
 /*LISTADOS PARA LA CONSEJERÍA DE ECONOMÍA Y HACIENDA
-Quinto listado, propietarios que no estan al corriente de pagos*/
+Quinto listado, propietarios que no estan al corriente de pagos por zona urbana y municipio.*/
 
 SELECT p.dni, p.nombre, p.apellidos, p.calle, p.num, p.piso, b.nombre as nombreBarrio, m.nombre as nombreMunicipio
 FROM Impuestos i, Propietarios p, Viviendas v, Municipios m, Barrios b
 WHERE p.dni = i.dni AND i.nºCatastro = v.nºCatastro AND v.idBarrios = b.idBarrios AND b.idMunicipio = m.idMunicipio
 	AND CURRENT_TIME() > fechaVencimiento AND fechaActualPago IS NULL
 ORDER BY m.nombre, b.nombre;
+
 
 
 
@@ -150,15 +152,34 @@ UPDATE Ocupantes
 La vivienda está en la calle Calle Lorenzo Gonzalez número 2, piso 2 A y al adquirirla su precio de tasación ha
 aumentado un 8%*/
 
-UPDATE Provincias p, Municipios m, Barrios b, Viviendas v, Propietarios prop
-	SET v.dni=prop.dni, v.precioTasacion=v.precioTasacion+0.08*v.precioTasacion
-    WHERE p.nombre='Segovia' AND m.nombre='Cuéllar' AND b.nombre='Caballeros' AND v.calle='Calle Lorenzo Gonzalez'
-		AND v.num='2' AND v.piso='2 A' AND prop.nombre='Raúl' AND prop.apellidos='Migua Otero';
+UPDATE Provincias p,
+    Municipios m,
+    Barrios b,
+    Viviendas v,
+    Propietarios prop 
+SET 
+    v.dni = prop.dni,
+    v.precioTasacion = v.precioTasacion + 0.08 * v.precioTasacion
+WHERE
+    p.nombre = 'Segovia'
+        AND m.nombre = 'Cuéllar'
+        AND b.nombre = 'Caballeros'
+        AND v.calle = 'Calle Lorenzo Gonzalez'
+        AND v.num = '2'
+        AND v.piso = '2 A'
+        AND prop.nombre = 'Raúl'
+        AND prop.apellidos = 'Migua Otero';
 
+/*SENTENCIAS DE MODIFICACION DE TUPLAS O ACTUALIZACIÓN DE TUPLAS
+17- Si el propietario ha excedido la fecha de vencimiento del impuesto se le aplica un 25% sobre el importe total.*/    
+
+UPDATE Impuestos i
+SET i.importe = i.importe * 1.25
+WHERE CURRENT_TIME() > i.fechaVencimiento AND i.fechaActualPago IS NULL;
 
 
 /*SENTENCIAS DE BORRADO DE TUPLAS
-17-Borrar la provincia con codigoProvincia=475611SAL*/
+18-Borrar la provincia con codigoProvincia=475611SAL*/
 
 DELETE FROM Provincias
 	WHERE codigoProvincia='475611SAL';
@@ -166,7 +187,7 @@ DELETE FROM Provincias
 
 
 /*SENTENCIAS DE BORRADO DE TUPLAS
-18-Borrar a los ocupantes nacidos antes de 1980*/
+19-Borrar a los ocupantes nacidos antes de 1980*/
 
 DELETE FROM Ocupantes
 	WHERE year(Ocupantes.fNac)<1980;
@@ -174,12 +195,11 @@ DELETE FROM Ocupantes
 
 
 /*SENTENCIAS DE BORRADO DE TUPLAS
-19-Borrar los impuestos relacionados a propietarios con dnis que contengan dos ceros juntos*/
+20-Borrar los impuestos relacionados a propietarios con dnis que contengan dos ceros juntos*/
 
 DELETE FROM Impuestos
 	WHERE dni LIKE '%00%';
  
-    
 
 
 
