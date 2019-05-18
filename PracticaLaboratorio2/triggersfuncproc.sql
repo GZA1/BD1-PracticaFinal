@@ -15,13 +15,19 @@ END//
 
 
 
-/**/
+/*Rebaja del 10% en los nuevos impuestos en un Municipio ej. Segovia*/
 delimiter //
-CREATE TRIGGER valBarrio AFTER UPDATE ON Barrios
+CREATE TRIGGER descZona BEFORE UPDATE ON Impuestos
 FOR EACH ROW
 BEGIN
-	IF  NEW.area - area > 200 THEN 
-		UPDATE Barrios SET avgM2price = avgM2price * 1.06;
+	DECLARE propViv VARCHAR(25);
+    SELECT nombre INTO propViv 
+    FROM Municipios 
+    WHERE idMunicipio = (SELECT idMunicipio FROM Municipios m, Barrios b WHERE b.idMunicipio = m.idMunicipio 
+    AND idBarrios = (SELECT idBarrios FROM Viviendas v, Impuestos i WHERE v.nºCatastro = i.nºCatastro));
+    
+	IF propViv = "Segovia" THEN 
+		UPDATE NEW.Impuestos SET importe = avgM2price * 0.90;
 	END IF;
  
 END//
