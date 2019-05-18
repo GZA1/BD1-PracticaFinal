@@ -94,3 +94,11 @@ begin
     return precioTotal;
 end//
 
+-- Calcular la recaudacion total de un año
+delimiter //
+CREATE FUNCTION recaudacionAnual( año INTEGER ) RETURNS DECIMAL(15, 4)
+begin
+	DECLARE recTotal decimal(15,3);
+	SELECT SUM(importe) INTO recTotal FROM Impuestos WHERE (SELECT year(fechaCreacion)) = año;
+    return recTotal;
+end //
