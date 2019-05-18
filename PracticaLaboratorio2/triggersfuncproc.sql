@@ -2,7 +2,7 @@
 
 /*------------------------------------- TRIGGERS ---------------------------------*/
 
-/*Si el barrio crece el precio del m2 aumenta*/
+/*1. Si el barrio crece el precio del m2 aumenta*/
 delimiter //
 CREATE TRIGGER valBarrio AFTER UPDATE ON Barrios
 FOR EACH ROW
@@ -15,7 +15,7 @@ END//
 
 
 
-/*Rebaja del 10% en los nuevos impuestos en un Municipio ej. Segovia*/
+/*2. Rebaja del 10% en los nuevos impuestos en un Municipio ej. Cuellar*/
 delimiter //
 CREATE TRIGGER descZona BEFORE UPDATE ON Impuestos
 FOR EACH ROW
@@ -26,14 +26,19 @@ BEGIN
     WHERE idMunicipio = (SELECT idMunicipio FROM Municipios m, Barrios b WHERE b.idMunicipio = m.idMunicipio 
     AND idBarrios = (SELECT idBarrios FROM Viviendas v, Impuestos i WHERE v.nºCatastro = i.nºCatastro));
     
-	IF propViv = "Segovia" THEN 
+	IF propViv = "Cuellar" THEN 
 		UPDATE NEW.Impuestos SET importe = avgM2price * 0.90;
-	END IF;
- 
+	END IF; 
 END//
 
 
-
+/*3. Rebaja del 10% en los nuevos impuestos en un Municipio ej. Cuellar*/
+delimiter //
+CREATE TRIGGER descZona BEFORE UPDATE ON Impuestos
+FOR EACH ROW
+BEGIN
+	
+END//
 
 /* ----------------------------- PROCEDIMIENTOS -------------------------------*/
 
@@ -67,11 +72,11 @@ begin
     WHERE i.nºCatastro = v.nºCatastro AND v.M2 >= tamaño;
 end//
 
--- 4. 
+-- 4. Encuentra las viviendas que pertenecen a un nombre y apellidos
 delimiter //
-CREATE PROCEDURE whatever(iN a integer)
+CREATE PROCEDURE encuentraViviendas(iN nombreProp VARCHAR(20), IN apellidosProp VARCHAR(40))
 begin
-
+	SELECT * FROM Viviendas v, Propietarios p WHERE v.dni = p.dni AND p.nombre = nombreProp AND p.apellidos = apellidosProp;
 end//
 
 -- 5. 
