@@ -38,9 +38,9 @@ CREATE TRIGGER multa BEFORE UPDATE ON Impuestos
 FOR EACH ROW
 BEGIN
 	if( new.fechaActualPago > fechaVencimiento ) then
-		
-        INSERT INTO impuestos(fechaInicio, fechaVencimiento, importe, nºCatastro, dni) 
-        VALUES(current_date(), date_add(current_time(), INTERVAL 1 MONTH), 500.99, nºCatastro, dni);
+		SELECT concat('La fecha de pago ha expirado, se le generará un impuesto en concepto de multa');
+        INSERT INTO impuestos(fechaInicio, fechaVencimiento, importe, fechaActualPago, nºCatastro, dni) 
+        VALUES()
     end if;
 END//
 
