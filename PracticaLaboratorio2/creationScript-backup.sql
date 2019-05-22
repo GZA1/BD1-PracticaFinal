@@ -113,7 +113,7 @@ COMMENT = '	';
 -- Table `AdminViviendas`.`Impuestos`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `AdminViviendas`.`Impuestos` (
-  `idImpuesto` VARCHAR(28) NOT NULL,
+  `idImpuesto` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `fechaInico` DATE NOT NULL,
   `fechaVencimiento` DATE NOT NULL,
   `importe` DECIMAL(10,3) NOT NULL,

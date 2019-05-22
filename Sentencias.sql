@@ -1,5 +1,13 @@
 use adminviviendas;
-
+drop database adminviviendas;
+show tables;
+select * from barrios;
+select * from impuestos;
+select * from municipios;
+select * from ocupantes;
+select * from propietarios;
+select * from provincias;
+select * from viviendas;
 
 
 /*LISTADOS PARA LA CONSEJERÍA DE VIVIENDA Y URBANISMO
