@@ -32,7 +32,28 @@ BEGIN
 END//
 
 
-/*3. Rebaja del 10% en los nuevos impuestos en un Municipio ej. Cuellar*/
+/*3. */
+delimiter //
+CREATE TRIGGER multa BEFORE UPDATE ON Impuestos
+FOR EACH ROW
+BEGIN
+	if( new.fechaActualPago > fechaVencimiento ) then
+		SELECT concat('La fecha de pago ha expirado, se le generará un impuesto en concepto de multa');
+        INSERT INTO impuestos(fechaInicio, fechaVencimiento, importe, fechaActualPago, nºCatastro, dni) 
+        VALUES()
+    end if;
+END//
+
+/*4. */
+delimiter //
+CREATE TRIGGER descZona BEFORE UPDATE ON Impuestos
+FOR EACH ROW
+BEGIN
+
+	
+END//
+
+/*5. */
 delimiter //
 CREATE TRIGGER descZona BEFORE UPDATE ON Impuestos
 FOR EACH ROW
@@ -105,11 +126,29 @@ begin
     return precioTotal;
 end//
 
--- Calcular la recaudacion total de un año
+-- 2. Calcular la recaudacion total de un año
 delimiter //
 CREATE FUNCTION recaudacionAnual( año INTEGER ) RETURNS DECIMAL(15, 4)
 begin
 	DECLARE recTotal decimal(15,3);
 	SELECT SUM(importe) INTO recTotal FROM Impuestos WHERE (SELECT year(fechaCreacion)) = año;
     return recTotal;
+end //
+
+
+-- 3. Calcular número de ocupantes que residen en un barrio
+delimiter //
+CREATE FUNCTION poblacionBarrio( nomBarrio VARCHAR(25) ) RETURNS INTEGER
+begin
+	DECLARE recuento INTEGER;
+	SELECT count(*) INTO recuento FROM Barrios b, Ocupantes o, Viviendas v WHERE b.idBarrios = v.idBarrios
+    AND v.nºCatastro = o.nºCatastro AND b.nombre = nomBarrio;
+    return recuento;
+end //
+
+-- 4. 
+delimiter //
+CREATE FUNCTION poblacionBarrio( nomBarrio VARCHAR(25) ) RETURNS INTEGER
+begin
+	
 end //
