@@ -70,19 +70,18 @@ delimiter //
 CREATE TRIGGER cambioMetrosCuadrados BEFORE UPDATE ON Viviendas
 FOR EACH ROW
 BEGIN
-
+    if( new.m2 > 0 ) then
+		set new.precioTasacion = new.precioTasacion * new.m2 / old.m2;
+	end if;
 END//
 delimiter ;
 select * from viviendas;
 DROP TRIGGER cambioMetrosCuadrados;
+update Viviendas set m2 = 200 where idViviendas = 1;
+update Viviendas set precioTasacion = 200000 where idViviendas = 1;
 
 /* ----------------------------- PROCEDIMIENTOS -------------------------------*/
 
-delimiter //
-CREATE PROCEDURE whatever(iN a integer)
-begin
-
-end//
 
 -- 1. Calcula el numero de impuestos sin pagar vinculados a un dni 
 delimiter //
@@ -115,12 +114,21 @@ begin
 	SELECT * FROM Viviendas v, Propietarios p WHERE v.dni = p.dni AND p.nombre = nombreProp AND p.apellidos = apellidosProp;
 end//
 
--- 5. 
+-- 5. Aumenta en un porcentaje el precio de tasación de las viviendas ubicadas en un municipio
 delimiter //
-CREATE PROCEDURE whatever(iN a integer)
+CREATE PROCEDURE incPrecioViviendasMunic(IN municipio varchar(45), IN porcentaje decimal)
 begin
-
+	update Municipios m, Barrios b, Viviendas v
+    set precioTasacion = precioTasacion + precioTasacion * porcentaje/100
+    where m.nombre = municipio and m.idMunicipio = b.idMunicipio and v.idBarrios = b.idBarrios;
 end//
+delimiter ;
+drop procedure incPrecioViviendasMunic;
+select * from viviendas;
+select * from municipios;
+select * from barrios;
+call incPrecioViviendasMunic('El Espinar', 5);
+update Viviendas set precioTasacion = 250000 where idViviendas = 4;
 
 
 
