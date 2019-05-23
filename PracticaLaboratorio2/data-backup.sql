@@ -121,7 +121,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `AdminViviendas`;
-INSERT INTO `AdminViviendas`.`Impuestos` (`fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `idVivienda`, `dni`) VALUES 
+INSERT INTO `AdminViviendas`.`Impuestos` (`fechaInico`, `fechaVencimiento`, `importe`, `fechaActualPago`, `idViviendas`, `dni`) VALUES 
 	('2018-10-17', '2018-12-26', 300, '2018-11-02', 1, '73793158G'),
 	('2018-08-11', '2018-11-22', 562.25, '2018-10-15', 2, '73793158G'),
 	('2018-09-19', '2018-12-25', 956.32, '2018-11-12', 3, '73793158G'),
@@ -142,7 +142,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `AdminViviendas`;
-INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `idVivienda`) VALUES 
+INSERT INTO `AdminViviendas`.`Ocupantes` (`dni`, `nombre`, `apellidos`, `fNac`, `idViviendas`) VALUES 
 	('74564234Q', 'Pedro', 'Alvarez Callado', '1982-12-17', 1),
 	('16512788T', 'Juan', 'Perez Adrados', '1980-03-11', 2),
 	('90095607S', 'Alvaro', 'Pascual Ramirez', '1975-07-15', 3),

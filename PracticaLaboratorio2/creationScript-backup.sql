@@ -82,7 +82,7 @@ ENGINE = InnoDB;
 -- Table `AdminViviendas`.`Viviendas`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `AdminViviendas`.`Viviendas` (
-  `idVivienda` INT NOT NULL AUTO_INCREMENT,
+  `idViviendas` INT NOT NULL AUTO_INCREMENT,
   `nºCatastro` VARCHAR(28) NOT NULL,
   `calle` VARCHAR(25) NOT NULL,
   `num` INT NOT NULL,
@@ -91,10 +91,10 @@ CREATE TABLE IF NOT EXISTS `AdminViviendas`.`Viviendas` (
   `precioTasacion` DECIMAL(10,3) NOT NULL,
   `idBarrios` VARCHAR(10) NOT NULL,
   `dni` CHAR(9) NOT NULL,
+  PRIMARY KEY (`idViviendas`),
   INDEX `fk_Viviendas_Barrios1_idx` (`idBarrios` ASC) VISIBLE,
   INDEX `fk_Viviendas_Propietarios1_idx` (`dni` ASC) VISIBLE,
-  PRIMARY KEY (`idVivienda`),
-  UNIQUE INDEX `idVivienda_UNIQUE` (`idVivienda` ASC) VISIBLE,
+  UNIQUE INDEX `idViviendas_UNIQUE` (`idViviendas` ASC) VISIBLE,
   CONSTRAINT `fk_Viviendas_Barrios1`
     FOREIGN KEY (`idBarrios`)
     REFERENCES `AdminViviendas`.`Barrios` (`idBarrios`)
@@ -113,24 +113,25 @@ COMMENT = '	';
 -- Table `AdminViviendas`.`Impuestos`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `AdminViviendas`.`Impuestos` (
-  `idImpuesto` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `idImpuesto` INT NOT NULL AUTO_INCREMENT,
   `fechaInico` DATE NOT NULL,
   `fechaVencimiento` DATE NOT NULL,
   `importe` DECIMAL(10,3) NOT NULL,
-  `fechaActualPago` DATE NULL,
+  `fechaActualPago` DATE NULL DEFAULT NULL,
   `dni` CHAR(9) NOT NULL,
-  `idVivienda` INT NOT NULL,
+  `idViviendas` INT NOT NULL,
   PRIMARY KEY (`idImpuesto`),
   INDEX `fk_Impuestos_Propietarios1_idx` (`dni` ASC) VISIBLE,
-  INDEX `fk_Impuestos_Viviendas1_idx` (`idVivienda` ASC) VISIBLE,
+  INDEX `fk_Impuestos_Viviendas1_idx` (`idViviendas` ASC) VISIBLE,
+  UNIQUE INDEX `idImpuesto_UNIQUE` (`idImpuesto` ASC) VISIBLE,
   CONSTRAINT `fk_Impuestos_Propietarios1`
     FOREIGN KEY (`dni`)
     REFERENCES `AdminViviendas`.`Propietarios` (`dni`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Impuestos_Viviendas1`
-    FOREIGN KEY (`idVivienda`)
-    REFERENCES `AdminViviendas`.`Viviendas` (`idVivienda`)
+    FOREIGN KEY (`idViviendas`)
+    REFERENCES `AdminViviendas`.`Viviendas` (`idViviendas`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -144,12 +145,12 @@ CREATE TABLE IF NOT EXISTS `AdminViviendas`.`Ocupantes` (
   `nombre` VARCHAR(45) NULL,
   `apellidos` VARCHAR(45) NULL,
   `fNac` DATE NULL,
-  `idVivienda` INT NOT NULL,
+  `idViviendas` INT NOT NULL,
   PRIMARY KEY (`dni`),
-  INDEX `fk_Ocupantes_Viviendas1_idx` (`idVivienda` ASC) VISIBLE,
+  INDEX `fk_Ocupantes_Viviendas1_idx` (`idViviendas` ASC) VISIBLE,
   CONSTRAINT `fk_Ocupantes_Viviendas1`
-    FOREIGN KEY (`idVivienda`)
-    REFERENCES `AdminViviendas`.`Viviendas` (`idVivienda`)
+    FOREIGN KEY (`idViviendas`)
+    REFERENCES `AdminViviendas`.`Viviendas` (`idViviendas`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
