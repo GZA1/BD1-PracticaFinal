@@ -44,22 +44,37 @@ BEGIN
     end if;
 END//
 
-/*4. */
+/*4. Al insertar una nueva vivienda, si está en un barrio con un área menor que 40m2, su precio de tasación disminuye*/
 delimiter //
-CREATE TRIGGER descZona BEFORE UPDATE ON Impuestos
+CREATE TRIGGER depreciacionVivienda BEFORE INSERT ON Viviendas
+FOR EACH ROW
+BEGIN
+	declare areaBarrio decimal(10,3);
+	select area into areaBarrio
+	from Barrios b
+	where b.idBarrios = new.idBarrios;
+	if(areaBarrio < 40) then
+		set new.precioTasacion = new.precioTasacion - ( new.precioTasacion * 0.05 );  
+    end if;
+END//
+delimiter ;
+DROP TRIGGER depreciacionVivienda;
+select * from viviendas;
+select * from barrios;
+INSERT INTO `AdminViviendas`.`Viviendas` (`nºCatastro`, `calle`, `num`, `piso`, `m2`, `precioTasacion`, `idBarrios`, `dni`)
+values ('2688754 CY7466H 0666 IO', 'Avda. Ejemplo', 1, '1 A', 200, 200000, '7536', '64105041Q');
+
+
+/*5. Al actualizar los m2 de una vivienda, el precio de tasación se modifica en función de la diferencia de m2 */
+delimiter //
+CREATE TRIGGER cambioMetrosCuadrados BEFORE UPDATE ON Viviendas
 FOR EACH ROW
 BEGIN
 
-	
 END//
-
-/*5. */
-delimiter //
-CREATE TRIGGER descZona BEFORE UPDATE ON Impuestos
-FOR EACH ROW
-BEGIN
-	
-END//
+delimiter ;
+select * from viviendas;
+DROP TRIGGER cambioMetrosCuadrados;
 
 /* ----------------------------- PROCEDIMIENTOS -------------------------------*/
 
