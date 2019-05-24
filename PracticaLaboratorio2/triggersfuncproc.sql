@@ -5,14 +5,20 @@ set global log_bin_trust_function_creators = 1;
 
 /*1. Si el barrio crece el precio del m2 aumenta*/
 delimiter //
-CREATE TRIGGER valBarrio AFTER UPDATE ON Barrios
+CREATE TRIGGER valBarrio BEFORE UPDATE ON Barrios
 FOR EACH ROW
 BEGIN
-	IF  NEW.area - area > 200 THEN 
-		UPDATE Barrios SET avgM2price = avgM2price * 1.06;
+	IF  NEW.area - OLD.area > 200 THEN
+		SET NEW.avgM2price = OLD.avgM2price * 1.06;
 	END IF;
- 
+
 END//
+
+delimiter ;
+drop trigger valBarrio;
+select * from Barrios where idBarrios=7504;
+update Barrios set area = area + 250 where idBarrios=7504;
+
 
 
 
@@ -22,14 +28,14 @@ CREATE TRIGGER descZona BEFORE UPDATE ON Impuestos
 FOR EACH ROW
 BEGIN
 	DECLARE propViv VARCHAR(25);
-    SELECT nombre INTO propViv 
-    FROM Municipios 
-    WHERE idMunicipio = (SELECT idMunicipio FROM Municipios m, Barrios b WHERE b.idMunicipio = m.idMunicipio 
+    SELECT nombre INTO propViv
+    FROM Municipios
+    WHERE idMunicipio = (SELECT idMunicipio FROM Municipios m, Barrios b WHERE b.idMunicipio = m.idMunicipio
     AND idBarrios = (SELECT idBarrios FROM Viviendas v, Impuestos i WHERE v.nºCatastro = i.nºCatastro));
-    
-	IF propViv = "Cuellar" THEN 
+
+	IF propViv = "Cuellar" THEN
 		UPDATE NEW.Impuestos SET importe = avgM2price * 0.90;
-	END IF; 
+	END IF;
 END//
 
 drop trigger descZona;
@@ -42,12 +48,16 @@ delimiter //
 CREATE TRIGGER multa AFTER UPDATE ON Impuestos
 FOR EACH ROW
 BEGIN
-	if( new.fechaActualPago > fechaVencimiento ) then
-		
-        INSERT INTO impuestos(fechaInicio, fechaVencimiento, importe, nºCatastro, dni) 
-        VALUES(current_date(), date_add(current_time(), INTERVAL 1 MONTH), 500.99, nºCatastro, dni);
+	if( new.fechaActualPago > new.fechaVencimiento ) then
+
+        INSERT INTO impuestos(fechaInicio, fechaVencimiento, importe, fechaActualPago, dni, idViviendas)
+        VALUES(current_date(), date_add(current_time(), INTERVAL 1 MONTH), 500.99, null, new.dni, new.idViviendas);
     end if;
 END//
+delimiter ;
+drop trigger multa;
+select * from impuestos;
+update impuestos set fechaActualPago = current_date() where idImpuesto=9;
 
 /*4. Al insertar una nueva vivienda, si está en un barrio con un área menor que 40m2, su precio de tasación disminuye*/
 delimiter //
@@ -59,13 +69,13 @@ BEGIN
 	from Barrios b
 	where b.idBarrios = new.idBarrios;
 	if(areaBarrio < 40) then
-		set new.precioTasacion = new.precioTasacion - ( new.precioTasacion * 0.05 );  
+		set new.precioTasacion = new.precioTasacion - ( new.precioTasacion * 0.05 );
     end if;
 END//
 delimiter ;
 DROP TRIGGER depreciacionVivienda;
 select * from viviendas;
-select * from barrios;
+select * from barrios where idBarrios=7536;
 INSERT INTO `AdminViviendas`.`Viviendas` (`nºCatastro`, `calle`, `num`, `piso`, `m2`, `precioTasacion`, `idBarrios`, `dni`)
 values ('2688754 CY7466H 0666 IO', 'Avda. Ejemplo', 1, '1 A', 200, 200000, '7536', '64105041Q');
 
@@ -80,16 +90,16 @@ BEGIN
 	end if;
 END//
 delimiter ;
-select * from viviendas;
+select * from viviendas where idViviendas=1;
 DROP TRIGGER cambioMetrosCuadrados;
-update Viviendas set m2 = 200 where idViviendas = 1;
+update Viviendas set m2 = 210 where idViviendas = 1;
 update Viviendas set precioTasacion = 200000 where idViviendas = 1;
 
 -- 6.El plazo minimo para el pago de un impuesto son dos meses
 DELIMITER //
 CREATE TRIGGER plazoMinImpuesto BEFORE INSERT ON Impuestos
 FOR EACH ROW
-BEGIN 
+BEGIN
 	IF datediff(d, NEW.fechaVencimiento, NEW.fechaInicio) < 60 THEN
 		SET NEW.fechaVencimiento = date_add(NEW.fechaInicio, INTERVAL 2 MONTH);
 	END IF;
@@ -97,14 +107,14 @@ END //
 delimiter ;
 select * from impuestos;
 DROP TRIGGER plazoMinImpuesto;
-insert into impuestos(fechaInicio, fechaVencimiento, importe, nºCatastro, dni) 
+insert into impuestos(fechaInicio, fechaVencimiento, importe, nºCatastro, dni)
         VALUES(20190627, date_add(20190627, INTERVAL 1 MONTH), 500.99, 7, '59804933B');
 
 
 /* ----------------------------- PROCEDIMIENTOS -------------------------------*/
 
 
--- 1. Calcula el numero de impuestos sin pagar vinculados a un dni 
+-- 1. Calcula el numero de impuestos sin pagar vinculados a un dni
 delimiter //
 CREATE PROCEDURE numImpuestosDeuda(iN elDni VARCHAR(15) , OUT total integer)
 begin
@@ -123,7 +133,7 @@ delimiter //
 CREATE PROCEDURE listarCasas(iN  barrio VARCHAR(45))
 begin
 	SELECT v.nºCatastro, v.calle, v.num, v.piso, v.m2, v.precioTasacion, v.dni, p.nombre, p.apellidos
-    FROM Viviendas v, Barrios b, Propietarios p 
+    FROM Viviendas v, Barrios b, Propietarios p
     WHERE b.nombre = barrio AND v.idBarrios = b.idBarrios AND v.dni = p.dni;
 end//
 
@@ -220,20 +230,24 @@ delimiter //
 CREATE FUNCTION recaudacionAnual( año INTEGER ) RETURNS DECIMAL(15, 4)
 begin
 	DECLARE recTotal decimal(15,3);
-	SELECT SUM(importe) INTO recTotal FROM Impuestos WHERE (SELECT year(fechaCreacion)) = año;
+	SELECT SUM(importe) INTO recTotal FROM Impuestos WHERE (SELECT year(fechaActualPago)) = año;
     return recTotal;
 end //
-
+drop function recaudacionAnual//
+select * from impuestos//
+select recaudacionAnual(2018)//
 
 -- 3. Calcular número de ocupantes que residen en un barrio
 delimiter //
 CREATE FUNCTION poblacionBarrio( nomBarrio VARCHAR(25) ) RETURNS INTEGER
 begin
 	DECLARE recuento INTEGER;
-	SELECT count(*) INTO recuento FROM Barrios b, Ocupantes o, Viviendas v WHERE b.idBarrios = v.idBarrios
-    AND v.nºCatastro = o.nºCatastro AND b.nombre = nomBarrio;
+	SELECT count(*) INTO recuento FROM Barrios b, Ocupantes o, Viviendas v
+    AND v.idViviendas = o.idViviendas AND b.nombre = nomBarrio;
     return recuento;
 end //
+drop function poblacionBarrio//
+select poblacionBarrio('Pajarillos')//
 
 -- 4. Buscar el dni del ocupante más mayor
 delimiter //
@@ -255,5 +269,3 @@ begin
     return areaMedia;
 end //
 select areaMediaMunicipios('Valladolid');
-
--- 6 
