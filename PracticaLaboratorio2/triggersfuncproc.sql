@@ -85,6 +85,22 @@ DROP TRIGGER cambioMetrosCuadrados;
 update Viviendas set m2 = 200 where idViviendas = 1;
 update Viviendas set precioTasacion = 200000 where idViviendas = 1;
 
+-- 6.El plazo minimo para el pago de un impuesto son dos meses
+DELIMITER //
+CREATE TRIGGER plazoMinImpuesto BEFORE INSERT ON Impuestos
+FOR EACH ROW
+BEGIN 
+	IF datediff(d, NEW.fechaVencimiento, NEW.fechaInicio) < 60 THEN
+		SET NEW.fechaVencimiento = date_add(NEW.fechaInicio, INTERVAL 2 MONTH);
+	END IF;
+END //
+delimiter ;
+select * from impuestos;
+DROP TRIGGER plazoMinImpuesto;
+insert into impuestos(fechaInicio, fechaVencimiento, importe, nºCatastro, dni) 
+        VALUES(20190627, date_add(20190627, INTERVAL 1 MONTH), 500.99, 7, '59804933B');
+
+
 /* ----------------------------- PROCEDIMIENTOS -------------------------------*/
 
 
@@ -135,9 +151,23 @@ select * from barrios;
 call incPrecioViviendasMunic('El Espinar', 5);
 update Viviendas set precioTasacion = 250000 where idViviendas = 4;
 
+-- 6. Listado de habitantes de un municipio con nombre apellido dni y ordenados afabéticamente
+DELIMITER //
+CREATE PROCEDURE listarHabitantesMunicipio(IN muni VARCHAR(25))
+BEGIN
+	SELECT nombre, apellidos, dni FROM ocupantes o, propietarios p, VIviendas v, Municipios m, Barios b 
+    WHERE v.idBarrios = b.idBarrios AND o.idViviendas = v.idViviendas AND p.dni = v.dni AND b.idMunicipio = m.idMunicipio
+    AND m.idMunicipio = muni
+    ORDER BY nombre;
+END//
 
-
-
+delimiter ;
+drop procedure listarHabitantesMunicipio;
+select * from ocupantes;
+select * from propietarios;
+select * from barrios;
+select * from municipios;
+call listarHabitantesMunicipio('Valladolid');
 
 
 /*-------------------------------- FUNCIONES --------------------------------*/
@@ -194,3 +224,5 @@ begin
     return areaMedia;
 end //
 select areaMediaMunicipios('Valladolid');
+
+-- 6 
