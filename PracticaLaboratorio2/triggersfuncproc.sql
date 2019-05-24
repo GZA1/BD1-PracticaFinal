@@ -34,7 +34,7 @@ END//
 
 
 
-/*3. */
+/*3. Impuesto multa de X cantidad si se paga un impuesto fuera de plazo*/
 delimiter //
 CREATE TRIGGER multa AFTER UPDATE ON Impuestos
 FOR EACH ROW
