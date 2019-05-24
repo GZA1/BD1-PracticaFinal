@@ -5,14 +5,20 @@ set global log_bin_trust_function_creators = 1;
 
 /*1. Si el barrio crece el precio del m2 aumenta*/
 delimiter //
-CREATE TRIGGER valBarrio AFTER UPDATE ON Barrios
+CREATE TRIGGER valBarrio BEFORE UPDATE ON Barrios
 FOR EACH ROW
 BEGIN
-	IF  NEW.area - area > 200 THEN 
-		UPDATE Barrios SET avgM2price = avgM2price * 1.06;
+	IF  NEW.area - OLD.area > 200 THEN 
+		SET NEW.avgM2price = OLD.avgM2price * 1.06;
 	END IF;
  
 END//
+
+delimiter ;
+drop trigger valBarrio;
+select * from Barrios where idBarrios=7504;
+update Barrios set area = area + 250 where idBarrios=7504;
+
 
 
 
