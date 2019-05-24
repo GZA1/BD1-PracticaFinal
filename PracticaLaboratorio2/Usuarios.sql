@@ -1,4 +1,4 @@
--- 1º  Admninistrador de la organización tiene todos los permisos 
+-- Admninistrador de la organización tiene todos los permisos 
 -- sobre todas las tablas del esquema Admin Viviendas
 
 CREATE USER orgAdmin
@@ -30,12 +30,15 @@ GRANT INSERT, UPDATE, DELETE, SELECT
 ON adminviviendas.* 
 TO 'dataEditor1'@'localhost';
 
--- Usuario dedicado para el encargado del censo de una provincia
-CREATE USER 'encCenso'@'localhost'
-IDENTIFIED BY '1111'
-PASSWORD EXPIRE NEVER;
+-- Usuario destinado a ser usado por una aplicacion web
 
-GRANT INSERT, UPDATE, DELETE, SELECT
-(propietarios, ocupantes) ON adminviviendas.*
-TO 'encCenso'@'localhost';
+CREATE USER 'webAppUser'@'localhost'
+IDENTIFIED BY '1111'
+REQUIRE SSL;
+
+GRANT INSERT, SELECT, UPDATE 
+ON adminviviendas.* 
+TO 'webAppUser'@'localhost';
+
+
 
