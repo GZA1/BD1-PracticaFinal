@@ -1,3 +1,4 @@
+set global log_bin_trust_function_creators = 1;
 /* TRIGGERS, PROCEDIMIENTOS Y FUNCIONES */
 
 /*------------------------------------- TRIGGERS ---------------------------------*/
@@ -35,7 +36,8 @@ drop trigger descZona;
 
 
 
-/*3. */
+
+/*3. Impuesto multa de X cantidad si se paga un impuesto fuera de plazo*/
 delimiter //
 CREATE TRIGGER multa AFTER UPDATE ON Impuestos
 FOR EACH ROW
@@ -47,30 +49,44 @@ BEGIN
     end if;
 END//
 
-/*4. */
+/*4. Al insertar una nueva vivienda, si está en un barrio con un área menor que 40m2, su precio de tasación disminuye*/
 delimiter //
-CREATE TRIGGER descZona BEFORE UPDATE ON Impuestos
+CREATE TRIGGER depreciacionVivienda BEFORE INSERT ON Viviendas
 FOR EACH ROW
 BEGIN
-
-	
+	declare areaBarrio decimal(10,3);
+	select area into areaBarrio
+	from Barrios b
+	where b.idBarrios = new.idBarrios;
+	if(areaBarrio < 40) then
+		set new.precioTasacion = new.precioTasacion - ( new.precioTasacion * 0.05 );  
+    end if;
 END//
+delimiter ;
+DROP TRIGGER depreciacionVivienda;
+select * from viviendas;
+select * from barrios;
+INSERT INTO `AdminViviendas`.`Viviendas` (`nºCatastro`, `calle`, `num`, `piso`, `m2`, `precioTasacion`, `idBarrios`, `dni`)
+values ('2688754 CY7466H 0666 IO', 'Avda. Ejemplo', 1, '1 A', 200, 200000, '7536', '64105041Q');
 
-/*5. */
+
+/*5. Al actualizar los m2 de una vivienda, el precio de tasación se modifica en función de la diferencia de m2 */
 delimiter //
-CREATE TRIGGER descZona BEFORE UPDATE ON Impuestos
+CREATE TRIGGER cambioMetrosCuadrados BEFORE UPDATE ON Viviendas
 FOR EACH ROW
 BEGIN
-	
+    if( new.m2 > 0 ) then
+		set new.precioTasacion = new.precioTasacion * new.m2 / old.m2;
+	end if;
 END//
+delimiter ;
+select * from viviendas;
+DROP TRIGGER cambioMetrosCuadrados;
+update Viviendas set m2 = 200 where idViviendas = 1;
+update Viviendas set precioTasacion = 200000 where idViviendas = 1;
 
 /* ----------------------------- PROCEDIMIENTOS -------------------------------*/
 
-delimiter //
-CREATE PROCEDURE whatever(iN a integer)
-begin
-
-end//
 
 -- 1. Calcula el numero de impuestos sin pagar vinculados a un dni 
 delimiter //
@@ -103,12 +119,21 @@ begin
 	SELECT * FROM Viviendas v, Propietarios p WHERE v.dni = p.dni AND p.nombre = nombreProp AND p.apellidos = apellidosProp;
 end//
 
--- 5. 
+-- 5. Aumenta en un porcentaje el precio de tasación de las viviendas ubicadas en un municipio
 delimiter //
-CREATE PROCEDURE whatever(iN a integer)
+CREATE PROCEDURE incPrecioViviendasMunic(IN municipio varchar(45), IN porcentaje decimal)
 begin
-
+	update Municipios m, Barrios b, Viviendas v
+    set precioTasacion = precioTasacion + precioTasacion * porcentaje/100
+    where m.nombre = municipio and m.idMunicipio = b.idMunicipio and v.idBarrios = b.idBarrios;
 end//
+delimiter ;
+drop procedure incPrecioViviendasMunic;
+select * from viviendas;
+select * from municipios;
+select * from barrios;
+call incPrecioViviendasMunic('El Espinar', 5);
+update Viviendas set precioTasacion = 250000 where idViviendas = 4;
 
 
 
@@ -149,18 +174,23 @@ begin
     return recuento;
 end //
 
--- 4. 
+-- 4. Buscar el dni del ocupante más mayor
 delimiter //
-CREATE FUNCTION poblacionBarrio( nomBarrio VARCHAR(25) ) RETURNS INTEGER
+CREATE FUNCTION dniOcupanteMasMayor() RETURNS char(9)
 begin
-	
+	DECLARE dniOc char(9);
+	SELECT dni INTO dniOc FROM Ocupantes WHERE fNac = (SELECT min(fNAc) FROM Ocupantes);
+    return dniOc;
 end //
 
-
-
-
-
-
-
-
-
+-- 5. El área media de los municipios de una provincia
+delimiter //
+CREATE FUNCTION areaMediaMunicipios(prov varchar(45)) RETURNS decimal(10,2)
+begin
+	DECLARE areaMedia decimal(10,2);
+	SELECT avg(area) INTO areaMedia
+    FROM Municipios m, Provincias p
+    WHERE p.nombre = prov AND m.codigoProvincia = p.codigoProvincia;
+    return areaMedia;
+end //
+select areaMediaMunicipios('Valladolid');
