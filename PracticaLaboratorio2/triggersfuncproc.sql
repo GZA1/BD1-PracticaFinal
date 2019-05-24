@@ -95,6 +95,22 @@ DROP TRIGGER cambioMetrosCuadrados;
 update Viviendas set m2 = 210 where idViviendas = 1;
 update Viviendas set precioTasacion = 200000 where idViviendas = 1;
 
+-- 6.El plazo minimo para el pago de un impuesto son dos meses
+DELIMITER //
+CREATE TRIGGER plazoMinImpuesto BEFORE INSERT ON Impuestos
+FOR EACH ROW
+BEGIN
+	IF datediff(d, NEW.fechaVencimiento, NEW.fechaInicio) < 60 THEN
+		SET NEW.fechaVencimiento = date_add(NEW.fechaInicio, INTERVAL 2 MONTH);
+	END IF;
+END //
+delimiter ;
+select * from impuestos;
+DROP TRIGGER plazoMinImpuesto;
+insert into impuestos(fechaInicio, fechaVencimiento, importe, nºCatastro, dni)
+        VALUES(20190627, date_add(20190627, INTERVAL 1 MONTH), 500.99, 7, '59804933B');
+
+
 /* ----------------------------- PROCEDIMIENTOS -------------------------------*/
 
 
@@ -105,6 +121,13 @@ begin
 	SELECT COUNT(*) INTO total FROM Impuestos i, Propietarios p WHERE i.dni = p.dni AND p.dni = elDni AND i.fechaActualPago = null;
 end//
 
+
+call numImpuestosDeuda('94328497T' , @total);
+
+SELECT @total;
+drop procedure numImpuestosDeuda;
+
+
 -- 2. Listar casas de un barrio
 delimiter //
 CREATE PROCEDURE listarCasas(iN  barrio VARCHAR(45))
@@ -114,13 +137,26 @@ begin
     WHERE b.nombre = barrio AND v.idBarrios = b.idBarrios AND v.dni = p.dni;
 end//
 
+
+
+call listarCasas('Judería');
+
+
+drop procedure listarCasas;
+
+
 -- 3. Subir los impuestos a casas con mas de X m^2
 delimiter //
 CREATE PROCEDURE subirImpuestosM2(iN incremento DECIMAL(10,3), IN tamaño DECIMAL(10,3))
 begin
 	UPDATE Impuestos i, Viviendas v SET i.importe = (i.importe+incremento)
-    WHERE i.nºCatastro = v.nºCatastro AND v.M2 >= tamaño;
+    WHERE i.idViviendas = v.idViviendas AND v.M2 >= tamaño;
 end//
+
+call subirImpuestosM2(20, 60);
+select * from impuestos;
+
+drop procedure subirImpuestosM2;
 
 -- 4. Encuentra las viviendas que pertenecen a un nombre y apellidos
 delimiter //
@@ -145,9 +181,23 @@ select * from barrios;
 call incPrecioViviendasMunic('El Espinar', 5);
 update Viviendas set precioTasacion = 250000 where idViviendas = 4;
 
+-- 6. Listado de habitantes de un municipio con nombre apellido dni y ordenados afabéticamente
+DELIMITER //
+CREATE PROCEDURE listarHabitantesMunicipio(IN muni VARCHAR(25))
+BEGIN
+	SELECT nombre, apellidos, dni FROM ocupantes o, propietarios p, VIviendas v, Municipios m, Barios b
+    WHERE v.idBarrios = b.idBarrios AND o.idViviendas = v.idViviendas AND p.dni = v.dni AND b.idMunicipio = m.idMunicipio
+    AND m.idMunicipio = muni
+    ORDER BY nombre;
+END//
 
-
-
+delimiter ;
+drop procedure listarHabitantesMunicipio;
+select * from ocupantes;
+select * from propietarios;
+select * from barrios;
+select * from municipios;
+call listarHabitantesMunicipio('Valladolid');
 
 
 /*-------------------------------- FUNCIONES --------------------------------*/
