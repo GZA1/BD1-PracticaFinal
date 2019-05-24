@@ -45,12 +45,16 @@ delimiter //
 CREATE TRIGGER multa AFTER UPDATE ON Impuestos
 FOR EACH ROW
 BEGIN
-	if( new.fechaActualPago > fechaVencimiento ) then
+	if( new.fechaActualPago > new.fechaVencimiento ) then
 		
-        INSERT INTO impuestos(fechaInicio, fechaVencimiento, importe, nºCatastro, dni) 
-        VALUES(current_date(), date_add(current_time(), INTERVAL 1 MONTH), 500.99, nºCatastro, dni);
+        INSERT INTO impuestos(fechaInicio, fechaVencimiento, importe, fechaActualPago, dni, idViviendas) 
+        VALUES(current_date(), date_add(current_time(), INTERVAL 1 MONTH), 500.99, null, new.dni, new.idViviendas);
     end if;
 END//
+delimiter ;
+drop trigger multa;
+select * from impuestos;
+update impuestos set fechaActualPago = current_date() where idImpuesto=9;
 
 /*4. Al insertar una nueva vivienda, si está en un barrio con un área menor que 40m2, su precio de tasación disminuye*/
 delimiter //
@@ -68,7 +72,7 @@ END//
 delimiter ;
 DROP TRIGGER depreciacionVivienda;
 select * from viviendas;
-select * from barrios;
+select * from barrios where idBarrios=7536;
 INSERT INTO `AdminViviendas`.`Viviendas` (`nºCatastro`, `calle`, `num`, `piso`, `m2`, `precioTasacion`, `idBarrios`, `dni`)
 values ('2688754 CY7466H 0666 IO', 'Avda. Ejemplo', 1, '1 A', 200, 200000, '7536', '64105041Q');
 
