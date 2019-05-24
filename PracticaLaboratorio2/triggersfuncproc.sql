@@ -149,7 +149,7 @@ drop procedure listarCasas;
 delimiter //
 CREATE PROCEDURE subirImpuestosM2(iN incremento DECIMAL(10,3), IN tamaño DECIMAL(10,3))
 begin
-	UPDATE Impuestos i, Viviendas v SET i.importe = (i.importe+incremento)
+	UPDATE Impuestos i, Viviendas v SET i.importe = (i.importe + incremento)
     WHERE i.idViviendas = v.idViviendas AND v.M2 >= tamaño;
 end//
 
@@ -165,6 +165,14 @@ begin
 	SELECT * FROM Viviendas v, Propietarios p WHERE v.dni = p.dni AND p.nombre = nombreProp AND p.apellidos = apellidosProp;
 end//
 
+call encuentraViviendas('Pedro','Ramiro López');
+
+
+select * from impuestos;
+
+drop procedure encuentraViviendas;
+
+
 -- 5. Aumenta en un porcentaje el precio de tasación de las viviendas ubicadas en un municipio
 delimiter //
 CREATE PROCEDURE incPrecioViviendasMunic(IN municipio varchar(45), IN porcentaje decimal)
@@ -173,6 +181,7 @@ begin
     set precioTasacion = precioTasacion + precioTasacion * porcentaje/100
     where m.nombre = municipio and m.idMunicipio = b.idMunicipio and v.idBarrios = b.idBarrios;
 end//
+
 delimiter ;
 drop procedure incPrecioViviendasMunic;
 select * from viviendas;
@@ -185,10 +194,10 @@ update Viviendas set precioTasacion = 250000 where idViviendas = 4;
 DELIMITER //
 CREATE PROCEDURE listarHabitantesMunicipio(IN muni VARCHAR(25))
 BEGIN
-	SELECT nombre, apellidos, dni FROM ocupantes o, propietarios p, VIviendas v, Municipios m, Barios b
+	SELECT * FROM ocupantes o, propietarios p, Viviendas v, Municipios m, Barrios b
     WHERE v.idBarrios = b.idBarrios AND o.idViviendas = v.idViviendas AND p.dni = v.dni AND b.idMunicipio = m.idMunicipio
     AND m.idMunicipio = muni
-    ORDER BY nombre;
+    ORDER BY p.nombre;
 END//
 
 delimiter ;
