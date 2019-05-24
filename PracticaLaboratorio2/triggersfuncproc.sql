@@ -1,3 +1,4 @@
+set global log_bin_trust_function_creators = 1;
 /* TRIGGERS, PROCEDIMIENTOS Y FUNCIONES */
 
 /*------------------------------------- TRIGGERS ---------------------------------*/
@@ -169,9 +170,23 @@ begin
     return recuento;
 end //
 
--- 4. 
+-- 4. Buscar el dni del ocupante más mayor
 delimiter //
-CREATE FUNCTION poblacionBarrio( nomBarrio VARCHAR(25) ) RETURNS INTEGER
+CREATE FUNCTION dniOcupanteMasMayor() RETURNS char(9)
 begin
-	
+	DECLARE dniOc char(9);
+	SELECT dni INTO dniOc FROM Ocupantes WHERE fNac = (SELECT min(fNAc) FROM Ocupantes);
+    return dniOc;
 end //
+
+-- 5. El área media de los municipios de una provincia
+delimiter //
+CREATE FUNCTION areaMediaMunicipios(prov varchar(45)) RETURNS decimal(10,2)
+begin
+	DECLARE areaMedia decimal(10,2);
+	SELECT avg(area) INTO areaMedia
+    FROM Municipios m, Provincias p
+    WHERE p.nombre = prov AND m.codigoProvincia = p.codigoProvincia;
+    return areaMedia;
+end //
+select areaMediaMunicipios('Valladolid');
