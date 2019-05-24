@@ -87,9 +87,9 @@ BEGIN
 	end if;
 END//
 delimiter ;
-select * from viviendas;
+select * from viviendas where idViviendas=1;
 DROP TRIGGER cambioMetrosCuadrados;
-update Viviendas set m2 = 200 where idViviendas = 1;
+update Viviendas set m2 = 210 where idViviendas = 1;
 update Viviendas set precioTasacion = 200000 where idViviendas = 1;
 
 /* ----------------------------- PROCEDIMIENTOS -------------------------------*/
@@ -161,25 +161,34 @@ begin
     return precioTotal;
 end//
 
+select * from viviendas//
+select * from barrios where idBarrios = 7560//
+select valorBarrio('Pajarillos')//
+
+
 -- 2. Calcular la recaudacion total de un año
 delimiter //
 CREATE FUNCTION recaudacionAnual( año INTEGER ) RETURNS DECIMAL(15, 4)
 begin
 	DECLARE recTotal decimal(15,3);
-	SELECT SUM(importe) INTO recTotal FROM Impuestos WHERE (SELECT year(fechaCreacion)) = año;
+	SELECT SUM(importe) INTO recTotal FROM Impuestos WHERE (SELECT year(fechaActualPago)) = año;
     return recTotal;
 end //
-
+drop function recaudacionAnual//
+select * from impuestos//
+select recaudacionAnual(2018)//
 
 -- 3. Calcular número de ocupantes que residen en un barrio
 delimiter //
 CREATE FUNCTION poblacionBarrio( nomBarrio VARCHAR(25) ) RETURNS INTEGER
 begin
 	DECLARE recuento INTEGER;
-	SELECT count(*) INTO recuento FROM Barrios b, Ocupantes o, Viviendas v WHERE b.idBarrios = v.idBarrios
-    AND v.nºCatastro = o.nºCatastro AND b.nombre = nomBarrio;
+	SELECT count(*) INTO recuento FROM Barrios b, Ocupantes o, Viviendas v
+    AND v.idViviendas = o.idViviendas AND b.nombre = nomBarrio;
     return recuento;
 end //
+drop function poblacionBarrio//
+select poblacionBarrio('Pajarillos')//
 
 -- 4. Buscar el dni del ocupante más mayor
 delimiter //
