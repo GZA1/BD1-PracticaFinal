@@ -8,10 +8,10 @@ delimiter //
 CREATE TRIGGER valBarrio BEFORE UPDATE ON Barrios
 FOR EACH ROW
 BEGIN
-	IF  NEW.area - OLD.area > 200 THEN 
+	IF  NEW.area - OLD.area > 200 THEN
 		SET NEW.avgM2price = OLD.avgM2price * 1.06;
 	END IF;
- 
+
 END//
 
 delimiter ;
@@ -28,15 +28,18 @@ CREATE TRIGGER descZona BEFORE UPDATE ON Impuestos
 FOR EACH ROW
 BEGIN
 	DECLARE propViv VARCHAR(25);
-    SELECT nombre INTO propViv 
-    FROM Municipios 
-    WHERE idMunicipio = (SELECT idMunicipio FROM Municipios m, Barrios b WHERE b.idMunicipio = m.idMunicipio 
+    SELECT nombre INTO propViv
+    FROM Municipios
+    WHERE idMunicipio = (SELECT idMunicipio FROM Municipios m, Barrios b WHERE b.idMunicipio = m.idMunicipio
     AND idBarrios = (SELECT idBarrios FROM Viviendas v, Impuestos i WHERE v.nºCatastro = i.nºCatastro));
-    
-	IF propViv = "Cuellar" THEN 
+
+	IF propViv = "Cuellar" THEN
 		UPDATE NEW.Impuestos SET importe = avgM2price * 0.90;
-	END IF; 
+	END IF;
 END//
+
+drop trigger descZona;
+
 
 
 
@@ -46,8 +49,8 @@ CREATE TRIGGER multa AFTER UPDATE ON Impuestos
 FOR EACH ROW
 BEGIN
 	if( new.fechaActualPago > new.fechaVencimiento ) then
-		
-        INSERT INTO impuestos(fechaInicio, fechaVencimiento, importe, fechaActualPago, dni, idViviendas) 
+
+        INSERT INTO impuestos(fechaInicio, fechaVencimiento, importe, fechaActualPago, dni, idViviendas)
         VALUES(current_date(), date_add(current_time(), INTERVAL 1 MONTH), 500.99, null, new.dni, new.idViviendas);
     end if;
 END//
@@ -66,7 +69,7 @@ BEGIN
 	from Barrios b
 	where b.idBarrios = new.idBarrios;
 	if(areaBarrio < 40) then
-		set new.precioTasacion = new.precioTasacion - ( new.precioTasacion * 0.05 );  
+		set new.precioTasacion = new.precioTasacion - ( new.precioTasacion * 0.05 );
     end if;
 END//
 delimiter ;
@@ -95,7 +98,7 @@ update Viviendas set precioTasacion = 200000 where idViviendas = 1;
 /* ----------------------------- PROCEDIMIENTOS -------------------------------*/
 
 
--- 1. Calcula el numero de impuestos sin pagar vinculados a un dni 
+-- 1. Calcula el numero de impuestos sin pagar vinculados a un dni
 delimiter //
 CREATE PROCEDURE numImpuestosDeuda(iN elDni VARCHAR(15) , OUT total integer)
 begin
@@ -107,7 +110,7 @@ delimiter //
 CREATE PROCEDURE listarCasas(iN  barrio VARCHAR(45))
 begin
 	SELECT v.nºCatastro, v.calle, v.num, v.piso, v.m2, v.precioTasacion, v.dni, p.nombre, p.apellidos
-    FROM Viviendas v, Barrios b, Propietarios p 
+    FROM Viviendas v, Barrios b, Propietarios p
     WHERE b.nombre = barrio AND v.idBarrios = b.idBarrios AND v.dni = p.dni;
 end//
 
