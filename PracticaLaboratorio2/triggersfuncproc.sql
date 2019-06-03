@@ -31,7 +31,7 @@ BEGIN
     SELECT nombre INTO propViv
     FROM Municipios
     WHERE idMunicipio = (SELECT idMunicipio FROM Municipios m, Barrios b WHERE b.idMunicipio = m.idMunicipio
-    AND idBarrios = (SELECT idBarrios FROM Viviendas v, Impuestos i WHERE v.nºCatastro = i.nºCatastro));
+    AND idBarrios = (SELECT idBarrios FROM Viviendas v, Impuestos i WHERE v.idViviendas = i.idViviendas));
 
 	IF propViv = "Cuellar" THEN
 		UPDATE NEW.Impuestos SET importe = avgM2price * 0.90;
@@ -39,6 +39,7 @@ BEGIN
 END//
 
 drop trigger descZona;
+update impuestos set fechaActualPago = current_date() where idImpuesto=9;
 
 
 
