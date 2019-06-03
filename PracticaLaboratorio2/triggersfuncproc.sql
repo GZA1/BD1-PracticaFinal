@@ -24,7 +24,7 @@ update Barrios set area = area + 250 where idBarrios=7504;
 
 /*2. Rebaja del 10% en los nuevos impuestos en un Municipio ej. Cuellar*/
 delimiter //
-CREATE TRIGGER descZona BEFORE UPDATE ON Impuestos
+CREATE TRIGGER descZona BEFORE INSERT ON Impuestos
 FOR EACH ROW
 BEGIN
 	DECLARE propViv VARCHAR(25);
@@ -34,14 +34,16 @@ BEGIN
     AND idBarrios = (SELECT idBarrios FROM Viviendas v, Impuestos i WHERE v.idViviendas = i.idViviendas));
 
 	IF propViv = "Cuellar" THEN
-		UPDATE NEW.Impuestos SET importe = avgM2price * 0.90;
+		SET new.importe = importe + avgM2price * 0.90;
 	END IF;
 END//
 
 drop trigger descZona;
+
+insert into impuestos(idImpuesto, fechaInicio, fechaVencimiento, importe, fechaActualPago, idViviendas, dni)
+values(current_date(), date_add(current_date(), INTERVAL 2 MONTH), 500, "73793158G", 1);
+
 update impuestos set fechaActualPago = current_date() where idImpuesto=9;
-
-
 
 
 /*3. Impuesto multa de X cantidad si se paga un impuesto fuera de plazo*/
