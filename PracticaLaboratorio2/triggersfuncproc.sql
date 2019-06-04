@@ -152,7 +152,7 @@ drop procedure listarCasas;
 delimiter //
 CREATE PROCEDURE subirImpuestosM2(iN incremento DECIMAL(10,3), IN tamaño DECIMAL(10,3))
 begin
-	UPDATE Impuestos i, Viviendas v SET i.importe = (i.importe+incremento)
+	UPDATE Impuestos i, Viviendas v SET i.importe = (i.importe + incremento)
     WHERE i.idViviendas = v.idViviendas AND v.M2 >= tamaño;
 end//
 
