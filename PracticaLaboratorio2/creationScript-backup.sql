@@ -114,7 +114,7 @@ COMMENT = '	';
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `AdminViviendas`.`Impuestos` (
   `idImpuesto` INT NOT NULL AUTO_INCREMENT,
-  `fechaInico` DATE NOT NULL,
+  `fechaInicio` DATE NOT NULL,
   `fechaVencimiento` DATE NOT NULL,
   `importe` DECIMAL(10,3) NOT NULL,
   `fechaActualPago` DATE NULL DEFAULT NULL,

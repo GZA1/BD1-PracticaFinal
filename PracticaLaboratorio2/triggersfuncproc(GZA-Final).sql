@@ -208,7 +208,6 @@ BEGIN
     WHERE v.idBarrios = b.idBarrios AND p.dni = v.dni AND b.idMunicipio = m.idMunicipio
     AND m.nombre = muni
     ORDER BY nombre;
-
 END//
 
 delimiter ;
