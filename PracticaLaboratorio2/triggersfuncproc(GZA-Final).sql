@@ -36,7 +36,7 @@ BEGIN
 
 	IF propViv = "Cuellar" THEN
 		SELECT avgM2price into eurM FROM barrios WHERE idBarrios = (SELECT idBarrios FROM Viviendas v WHERE v.idViviendas = new.idViviendas);
-		SET new.importe = new.importe + eurM * 0.90;
+		SET new.importe = new.importe * 0.90;
 	END IF;
 END//
 
