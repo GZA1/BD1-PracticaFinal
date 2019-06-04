@@ -10,6 +10,7 @@ select * from provincias;
 select * from viviendas;
 
 
+
 /*LISTADOS PARA LA CONSEJERÍA DE VIVIENDA Y URBANISMO
 
 Primera consulta, listado de zonas urbanas con precio medio del m2, nombre, área coord. geográficas
