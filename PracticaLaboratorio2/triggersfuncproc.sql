@@ -1,4 +1,5 @@
 set global log_bin_trust_function_creators = 1;
+SET SQL_SAFE_UPDATES = 0;
 /* TRIGGERS, PROCEDIMIENTOS Y FUNCIONES */
 
 /*------------------------------------- TRIGGERS ---------------------------------*/
@@ -16,8 +17,8 @@ END//
 
 delimiter ;
 drop trigger valBarrio;
-select * from Barrios where idBarrios=7504;
-update Barrios set area = area + 250 where idBarrios=7504;
+select * from Barrios where area<40;
+update Barrios set area = area + 250 where idBarrios=7500;
 
 
 
@@ -78,7 +79,7 @@ delimiter ;
 DROP TRIGGER depreciacionVivienda;
 select * from viviendas;
 select * from barrios where idBarrios=7536;
-INSERT INTO `AdminViviendas`.`Viviendas` (`nºCatastro`, `calle`, `num`, `piso`, `m2`, `precioTasacion`, `idBarrios`, `dni`)
+INSERT INTO Viviendas (nºCatastro, calle, num, piso, m2, precioTasacion, idBarrios, dni)
 values ('2688754 CY7466H 0666 IO', 'Avda. Ejemplo', 1, '1 A', 200, 200000, '7536', '64105041Q');
 
 
